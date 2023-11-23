@@ -28,31 +28,30 @@ function createBookCard(book) {
     //start creating HTML content for bookCard
     let bookHTML = `<div 
                         class="book-card" 
-                        id="book-${book.index}"
-                    >`;
+                        id="book-${book.index}">`;
     //add a <p> element to bookCard for each property in book
     for (let prop in book) {
-        bookHTML += `<p 
-                        class="book-property book-${prop}"
-                        >${book[prop]}<
-                        /p>`;
+        bookHTML += `<p class="book-property" id="book-${prop}-${book.index}"></p>`;
     };
     //add buttons to bookCard
     bookHTML += `<button 
                     class="toggle-read-button" 
                     id="toggle${book.index}"
-                    >Toggle read<
-                    /button>
+                    >Toggle read</button>
                 <button 
                     class="remove-book-button" 
                     id="remove${book.index}"
-                    >Remove<
-                    /button>`
+                    >Remove</button>`
     bookHTML += '</div>';
     //insert HTML content to bookCard
     bookCard.innerHTML = bookHTML;
     //append the bookCard element to the "stand" on screen
     stand.appendChild(bookCard);
+    //add book values to bookCard <p> elements
+    for (let prop in book) {
+        let propElement = document.querySelector(`#book-${prop}-${book.index}`);
+        propElement.textContent = book[prop];
+    };
     // add event listener to removeBookButton
     let removeBookButton = 
             document.querySelector(`#remove${book.index}`);
