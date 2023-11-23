@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>myLibrary</title>
+</head>
+<body>
+    <div class="section">
+        <form action="post" class="newbook-form" name="newbook-form">
+            <label class="newbook-label">
+                Title:
+                <input required class="newbook-input" type="text" name="title">
+            </label>
+            <label class="newbook-label">
+                Author:
+                <input required class="newbook-input" type="text" name="author">
+            </label>
+            <label class="newbook-label">
+                Pages:
+                <input required class="newbook-input" type="number" name="page-count">
+            </label>
+            <label class="newbook-label">
+                Already read?
+                <select required class="newbook-input" type="select" name="already-read">
+                    <option value="No" selected>No</option>
+                    <option value="Yes">Yes</option>
+                </select>
+            </label>
+            <button class="newbook-submit" type="submit">Add</button>
+        </form>
+        <div class="section" id="book-stand">
+            <div class="book-stand-heading book-card">
+                <p>Title</p>
+                <p>Author</p>
+                <p>Pages</p>
+                <p>Read</p>
+                <p>Index</p>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        :root * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Verdana, Arial, sans-serif;
+        }
+        html, body {
+            width: 100%;
+            height: 100%;
+        }
+        body {
+            background: antiquewhite;
+            display: flex;
+            justify-content: center;
+        }
+        .section {
+            background: yellow;
+            height: 80%;
+            width: min(1200px, 80%);
+            padding: 1rem;
+            margin-top: 1rem;
+            background: brown;
+            display: flex;
+            flex-direction: column;
+            overflow: auto;
+        }
+        .book-card, .newbook-form {
+            width: 100%;
+            height: max-content;
+            padding: 1rem;
+            display: grid;
+            gap: 1rem;
+            background: lightcyan;
+        }
+        .book-card, .book-stand-heading {
+            grid-template-columns: repeat(auto-fit, minmax(6rem, 1fr));
+        }
+        .newbook-form {
+            grid-template-columns: repeat(5, minmax(6rem, 1fr));
+        }
+        .newbook-label {
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+        }
+        .newbook-input {
+            font-size: 1rem;
+            padding: 0.2rem
+        }
+        #book-stand {
+            width: 100%;
+            background: orange;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, max-content);
+            height: max-content;
+        }
+        #book-stand p {
+            display: inline;
+        }
+        .book-stand-heading {
+            font-weight: bold;
+        }
+
+    </style>
+    <script>
+        let books = [];
+        let stand = document.querySelector('#book-stand');
+        let newBookForm = document.forms['newbook-form'];
+        let lastIndex = 0;
+
+        newBookForm.addEventListener('submit', getValues);
+
+
+        
+        function getValues(event) {
+            event.preventDefault();
+            let book = new Book(this);
+            books.push(book);
+            createBookCard(book);
+            lastIndex += 1;
+        }
+        function Book(form) {
+            this.title = form.title.value,
+            this.author = form.author.value,
+            this.pages = form['page-count'].value,
+            this.alreadyRead = form['already-read'].value,
+            this.index = lastIndex + 1
+        }
+        function createBookCard(book) {
+            let bookCard = document.createElement('div');
+            let bookHTML = `<div class="book-card" id="book-${book.index}">`;
+            for (let prop in book) {
+                bookHTML += `<p class="book-property book-${prop}">${book[prop]}</p>`;
+            };
+            bookHTML += `<button class="toggle-read-button" id="toggle${book.index}">Toggle read</button><button class="remove-book-button" id="remove${book.index}">Remove</button>`
+            bookHTML += '</div>';
+            bookCard.innerHTML = bookHTML;
+            stand.appendChild(bookCard);
+            let removeBookButton = document.querySelector(`#remove${book.index}`);
+            removeBookButton.addEventListener('click', e => {
+                e.target.parentElement.remove();
+                books.splice(books.findIndex(item => item.index === book.index), 1);
+            });
+            let toggleReadButton = document.querySelector(`#toggle${book.index}`);
+            toggleReadButton.addEventListener('click', e => {
+                book.alreadyRead === 'Yes' ? book.alreadyRead = 'No' : book.alreadyRead = 'Yes' ;
+                let alreadyReadDisplay = document.querySelector(`#book-${book.index} > .book-alreadyRead`);
+                alreadyReadDisplay.textContent = book.alreadyRead;
+            })
+        }
+    </script>
+</body>
+</html>
