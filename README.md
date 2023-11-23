@@ -2,5 +2,7 @@
 
 Library project for Odin
 
-Guidelines at:
+Purpose: using prototypical inheritance.
+
+Guidelines at
 https://www.theodinproject.com/lessons/node-path-javascript-library
