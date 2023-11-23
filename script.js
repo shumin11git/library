@@ -69,7 +69,7 @@ function createBookCard(book) {
             book.alreadyRead = 'No' : 
             book.alreadyRead = 'Yes' ;
         let alreadyReadDisplay = 
-            document.querySelector(`#book-${book.index} > .book-alreadyRead`);
+            document.querySelector(`#book-alreadyRead-${book.index}`);
         alreadyReadDisplay.textContent = book.alreadyRead;
     })
 }
